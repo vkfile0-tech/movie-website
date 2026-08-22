@@ -3,8 +3,10 @@
 import { useState, useEffect } from "react";
 
 interface Movie {
-  id: number;
-  title: string;
+  export const metadata = {
+  title: "MovieFlex - Watch Trending Movies & Trailers",
+  description: "Browse popular movies and watch trailers on MovieFlex",
+};
   poster_path: string;
   vote_average: number;
   release_date: string;
