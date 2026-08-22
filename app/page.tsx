@@ -44,11 +44,18 @@ export default function Home() {
     try {
       const res = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=${API_KEY}`);
       const data = await res.json();
-      const trailer = data.results?.find(
-        (video: any) => (video.type === "Trailer" || video.type === "Teaser") && video.site === "YouTube"
+      const videos = data.results || [];
+      
+      // Try finding Trailer first, then Teaser/Clip, else take the first video
+      const officialTrailer = videos.find(
+        (v: any) => v.site === "YouTube" && v.type === "Trailer"
       );
-      if (trailer) {
-        setTrailerKey(trailer.key);
+      const anyVideo = videos.find((v: any) => v.site === "YouTube");
+
+      if (officialTrailer) {
+        setTrailerKey(officialTrailer.key);
+      } else if (anyVideo) {
+        setTrailerKey(anyVideo.key);
       }
     } catch (error) {
       console.error("Error fetching trailer:", error);
@@ -78,7 +85,7 @@ export default function Home() {
             padding: "10px 14px",
             borderRadius: "6px",
             border: "none",
-            width: "220px",
+            width: "200px",
             fontSize: "15px",
             color: "#000",
             outline: "none"
@@ -188,7 +195,7 @@ export default function Home() {
               <div style={{ marginBottom: "15px" }}>
                 <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
                   <iframe
-                    src={`https://www.youtube-nocookie.com/embed/${trailerKey}?rel=0&modestbranding=1`}
+                    src={`https://www.youtube.com/embed/${trailerKey}`}
                     title="Movie Trailer"
                     style={{
                       position: "absolute",
@@ -199,7 +206,7 @@ export default function Home() {
                       borderRadius: "8px",
                       border: "none"
                     }}
-                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   ></iframe>
                 </div>
@@ -220,15 +227,35 @@ export default function Home() {
                     fontSize: "13px"
                   }}
                 >
-                  ▶ Watch Directly on YouTube
+                  ▶ Open Trailer in YouTube App
                 </a>
               </div>
             ) : (
-              <img
-                src={selectedMovie.poster_path ? `https://image.tmdb.org/t/p/w500${selectedMovie.poster_path}` : ""}
-                alt={selectedMovie.title}
-                style={{ width: "100%", maxHeight: "220px", objectFit: "cover", borderRadius: "8px", marginBottom: "15px" }}
-              />
+              <div style={{ marginBottom: "15px" }}>
+                <img
+                  src={selectedMovie.poster_path ? `https://image.tmdb.org/t/p/w500${selectedMovie.poster_path}` : ""}
+                  alt={selectedMovie.title}
+                  style={{ width: "100%", maxHeight: "220px", objectFit: "cover", borderRadius: "8px", marginBottom: "10px" }}
+                />
+                <a
+                  href={`https://www.youtube.com/results?search_query=${encodeURIComponent(selectedMovie.title + " trailer")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "block",
+                    textAlign: "center",
+                    padding: "10px 14px",
+                    backgroundColor: "#e50914",
+                    color: "#fff",
+                    borderRadius: "6px",
+                    textDecoration: "none",
+                    fontWeight: "bold",
+                    fontSize: "13px"
+                  }}
+                >
+                  ▶ Watch Trailer on YouTube
+                </a>
+              </div>
             )}
 
             <p style={{ fontSize: "13px", lineHeight: "1.5" }}>{selectedMovie.overview || "No description available."}</p>
