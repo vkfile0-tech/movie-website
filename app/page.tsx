@@ -18,6 +18,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [trailerKey, setTrailerKey] = useState<string | null>(null);
 
   const fetchMovies = async (query = "") => {
     setLoading(true);
@@ -33,6 +34,24 @@ export default function Home() {
       console.error("Error fetching movies:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const openMovieDetails = async (movie: Movie) => {
+    setSelectedMovie(movie);
+    setTrailerKey(null);
+
+    try {
+      const res = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=${API_KEY}`);
+      const data = await res.json();
+      const trailer = data.results?.find(
+        (video: any) => (video.type === "Trailer" || video.type === "Teaser") && video.site === "YouTube"
+      );
+      if (trailer) {
+        setTrailerKey(trailer.key);
+      }
+    } catch (error) {
+      console.error("Error fetching trailer:", error);
     }
   };
 
@@ -59,7 +78,7 @@ export default function Home() {
             padding: "10px 14px",
             borderRadius: "6px",
             border: "none",
-            width: "280px",
+            width: "220px",
             fontSize: "15px",
             color: "#000",
             outline: "none"
@@ -87,11 +106,11 @@ export default function Home() {
       {loading ? (
         <p>Loading movies...</p>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "20px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: "15px" }}>
           {movies.map((movie) => (
             <div
               key={movie.id}
-              onClick={() => setSelectedMovie(movie)}
+              onClick={() => openMovieDetails(movie)}
               style={{
                 backgroundColor: "#1f1f1f",
                 borderRadius: "10px",
@@ -104,16 +123,16 @@ export default function Home() {
               <img
                 src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "https://via.placeholder.com/500x750?text=No+Image"}
                 alt={movie.title}
-                style={{ width: "100%", height: "260px", objectFit: "cover" }}
+                style={{ width: "100%", height: "220px", objectFit: "cover" }}
               />
-              <h3 style={{ fontSize: "14px", margin: "10px 5px 5px 5px" }}>{movie.title}</h3>
-              <p style={{ fontSize: "12px", color: "#aaa" }}>⭐ {movie.vote_average}</p>
+              <h3 style={{ fontSize: "13px", margin: "8px 5px 4px 5px" }}>{movie.title}</h3>
+              <p style={{ fontSize: "11px", color: "#aaa" }}>⭐ {movie.vote_average}</p>
             </div>
           ))}
         </div>
       )}
 
-      {/* Movie Details Modal */}
+      {/* Movie Modal */}
       {selectedMovie && (
         <div
           onClick={() => setSelectedMovie(null)}
@@ -123,24 +142,26 @@ export default function Home() {
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            backgroundColor: "rgba(0, 0, 0, 0.85)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             zIndex: 1000,
-            padding: "20px"
+            padding: "15px"
           }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
               backgroundColor: "#222",
-              padding: "25px",
+              padding: "20px",
               borderRadius: "12px",
               maxWidth: "500px",
               width: "100%",
               position: "relative",
-              color: "#fff"
+              color: "#fff",
+              maxHeight: "85vh",
+              overflowY: "auto"
             }}
           >
             <button
@@ -158,16 +179,59 @@ export default function Home() {
             >
               ✖
             </button>
-            <h2 style={{ marginBottom: "10px" }}>{selectedMovie.title}</h2>
-            <p style={{ fontSize: "14px", color: "#aaa", marginBottom: "10px" }}>
+            <h2 style={{ marginBottom: "8px", paddingRight: "30px", fontSize: "20px" }}>{selectedMovie.title}</h2>
+            <p style={{ fontSize: "12px", color: "#aaa", marginBottom: "12px" }}>
               Release Date: {selectedMovie.release_date} | Rating: ⭐ {selectedMovie.vote_average}
             </p>
-            <img
-              src={selectedMovie.poster_path ? `https://image.tmdb.org/t/p/w500${selectedMovie.poster_path}` : ""}
-              alt={selectedMovie.title}
-              style={{ width: "100%", maxHeight: "250px", objectFit: "cover", borderRadius: "8px", marginBottom: "15px" }}
-            />
-            <p style={{ fontSize: "14px", lineHeight: "1.5" }}>{selectedMovie.overview || "No description available."}</p>
+
+            {trailerKey ? (
+              <div style={{ marginBottom: "15px" }}>
+                <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
+                  <iframe
+                    src={`https://www.youtube-nocookie.com/embed/${trailerKey}?rel=0&modestbranding=1`}
+                    title="Movie Trailer"
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      borderRadius: "8px",
+                      border: "none"
+                    }}
+                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+                <a
+                  href={`https://www.youtube.com/watch?v=${trailerKey}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "block",
+                    textAlign: "center",
+                    marginTop: "10px",
+                    padding: "8px 12px",
+                    backgroundColor: "#FF0000",
+                    color: "#fff",
+                    borderRadius: "6px",
+                    textDecoration: "none",
+                    fontWeight: "bold",
+                    fontSize: "13px"
+                  }}
+                >
+                  ▶ Watch Directly on YouTube
+                </a>
+              </div>
+            ) : (
+              <img
+                src={selectedMovie.poster_path ? `https://image.tmdb.org/t/p/w500${selectedMovie.poster_path}` : ""}
+                alt={selectedMovie.title}
+                style={{ width: "100%", maxHeight: "220px", objectFit: "cover", borderRadius: "8px", marginBottom: "15px" }}
+              />
+            )}
+
+            <p style={{ fontSize: "13px", lineHeight: "1.5" }}>{selectedMovie.overview || "No description available."}</p>
           </div>
         </div>
       )}
