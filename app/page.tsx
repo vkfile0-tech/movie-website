@@ -17,6 +17,7 @@ export default function Home() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
   const fetchMovies = async (query = "") => {
     setLoading(true);
@@ -88,7 +89,18 @@ export default function Home() {
       ) : (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "20px" }}>
           {movies.map((movie) => (
-            <div key={movie.id} style={{ backgroundColor: "#1f1f1f", borderRadius: "10px", overflow: "hidden", textAlign: "center", paddingBottom: "10px" }}>
+            <div
+              key={movie.id}
+              onClick={() => setSelectedMovie(movie)}
+              style={{
+                backgroundColor: "#1f1f1f",
+                borderRadius: "10px",
+                overflow: "hidden",
+                textAlign: "center",
+                paddingBottom: "10px",
+                cursor: "pointer"
+              }}
+            >
               <img
                 src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "https://via.placeholder.com/500x750?text=No+Image"}
                 alt={movie.title}
@@ -98,6 +110,65 @@ export default function Home() {
               <p style={{ fontSize: "12px", color: "#aaa" }}>⭐ {movie.vote_average}</p>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Movie Details Modal */}
+      {selectedMovie && (
+        <div
+          onClick={() => setSelectedMovie(null)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+            padding: "20px"
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              backgroundColor: "#222",
+              padding: "25px",
+              borderRadius: "12px",
+              maxWidth: "500px",
+              width: "100%",
+              position: "relative",
+              color: "#fff"
+            }}
+          >
+            <button
+              onClick={() => setSelectedMovie(null)}
+              style={{
+                position: "absolute",
+                top: "10px",
+                right: "15px",
+                background: "none",
+                border: "none",
+                color: "#fff",
+                fontSize: "22px",
+                cursor: "pointer"
+              }}
+            >
+              ✖
+            </button>
+            <h2 style={{ marginBottom: "10px" }}>{selectedMovie.title}</h2>
+            <p style={{ fontSize: "14px", color: "#aaa", marginBottom: "10px" }}>
+              Release Date: {selectedMovie.release_date} | Rating: ⭐ {selectedMovie.vote_average}
+            </p>
+            <img
+              src={selectedMovie.poster_path ? `https://image.tmdb.org/t/p/w500${selectedMovie.poster_path}` : ""}
+              alt={selectedMovie.title}
+              style={{ width: "100%", maxHeight: "250px", objectFit: "cover", borderRadius: "8px", marginBottom: "15px" }}
+            />
+            <p style={{ fontSize: "14px", lineHeight: "1.5" }}>{selectedMovie.overview || "No description available."}</p>
+          </div>
         </div>
       )}
     </div>
