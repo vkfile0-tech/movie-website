@@ -13,10 +13,10 @@ interface CustomMovie {
 const myMovies: CustomMovie[] = [
   {
     id: 1,
-    title: "Sample Clean Video (Google Drive)",
+    title: "My First Movie",
     poster: "https://images.pexels.com/photos/3829965/pexels-photo-3829965.jpeg?auto=compress&cs=tinysrgb&w=600",
     driveEmbedUrl: "https://drive.google.com/file/d/1UNGtaVfFUM75dIeMmVFy7GDhY9nIl1fS/preview",
-    description: "Yeh aapki Google Drive se play hone wali clean video hai jisme koi ad nahi aayega."
+    description: "Enjoy watching in HD quality with zero ads."
   }
 ];
 
@@ -25,7 +25,9 @@ export default function Home() {
 
   return (
     <div style={{ padding: "20px", fontFamily: "sans-serif", backgroundColor: "#141414", color: "#fff", minHeight: "100vh" }}>
-      <h1 style={{ fontSize: "28px", fontWeight: "bold", marginBottom: "20px" }}>🎬 MovieFlex (Clean Cloud)</h1>
+      <h1 style={{ fontSize: "28px", fontWeight: "bold", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+        🎬 MovieFlex
+      </h1>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "20px" }}>
         {myMovies.map((movie) => (
@@ -48,7 +50,7 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Zero-Ads Google Drive Player Modal */}
+      {/* Clean Player Modal */}
       {selectedMovie && (
         <div
           onClick={() => setSelectedMovie(null)}
