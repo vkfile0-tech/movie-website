@@ -3,10 +3,8 @@
 import { useState, useEffect } from "react";
 
 interface Movie {
-  export const metadata = {
-  title: "MovieFlex - Watch Trending Movies & Trailers",
-  description: "Browse popular movies and watch trailers on MovieFlex",
-};
+  id: number;
+  title: string;
   poster_path: string;
   vote_average: number;
   release_date: string;
@@ -20,7 +18,6 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-  const [trailerKey, setTrailerKey] = useState<string | null>(null);
 
   const fetchMovies = async (query = "") => {
     setLoading(true);
@@ -36,31 +33,6 @@ export default function Home() {
       console.error("Error fetching movies:", error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const openMovieDetails = async (movie: Movie) => {
-    setSelectedMovie(movie);
-    setTrailerKey(null);
-
-    try {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=${API_KEY}`);
-      const data = await res.json();
-      const videos = data.results || [];
-      
-      // Try finding Trailer first, then Teaser/Clip, else take the first video
-      const officialTrailer = videos.find(
-        (v: any) => v.site === "YouTube" && v.type === "Trailer"
-      );
-      const anyVideo = videos.find((v: any) => v.site === "YouTube");
-
-      if (officialTrailer) {
-        setTrailerKey(officialTrailer.key);
-      } else if (anyVideo) {
-        setTrailerKey(anyVideo.key);
-      }
-    } catch (error) {
-      console.error("Error fetching trailer:", error);
     }
   };
 
@@ -119,7 +91,7 @@ export default function Home() {
           {movies.map((movie) => (
             <div
               key={movie.id}
-              onClick={() => openMovieDetails(movie)}
+              onClick={() => setSelectedMovie(movie)}
               style={{
                 backgroundColor: "#1f1f1f",
                 borderRadius: "10px",
@@ -141,7 +113,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* Movie Modal */}
+      {/* Movie Player Modal */}
       {selectedMovie && (
         <div
           onClick={() => setSelectedMovie(null)}
@@ -165,11 +137,11 @@ export default function Home() {
               backgroundColor: "#222",
               padding: "20px",
               borderRadius: "12px",
-              maxWidth: "500px",
+              maxWidth: "700px",
               width: "100%",
               position: "relative",
               color: "#fff",
-              maxHeight: "85vh",
+              maxHeight: "90vh",
               overflowY: "auto"
             }}
           >
@@ -193,72 +165,23 @@ export default function Home() {
               Release Date: {selectedMovie.release_date} | Rating: ⭐ {selectedMovie.vote_average}
             </p>
 
-            {trailerKey ? (
-              <div style={{ marginBottom: "15px" }}>
-                <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
-                  <iframe
-                    src={`https://www.youtube.com/embed/${trailerKey}`}
-                    title="Movie Trailer"
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: "8px",
-                      border: "none"
-                    }}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-                <a
-                  href={`https://www.youtube.com/watch?v=${trailerKey}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: "block",
-                    textAlign: "center",
-                    marginTop: "10px",
-                    padding: "8px 12px",
-                    backgroundColor: "#FF0000",
-                    color: "#fff",
-                    borderRadius: "6px",
-                    textDecoration: "none",
-                    fontWeight: "bold",
-                    fontSize: "13px"
-                  }}
-                >
-                  ▶ Open Trailer in YouTube App
-                </a>
-              </div>
-            ) : (
-              <div style={{ marginBottom: "15px" }}>
-                <img
-                  src={selectedMovie.poster_path ? `https://image.tmdb.org/t/p/w500${selectedMovie.poster_path}` : ""}
-                  alt={selectedMovie.title}
-                  style={{ width: "100%", maxHeight: "220px", objectFit: "cover", borderRadius: "8px", marginBottom: "10px" }}
-                />
-                <a
-                  href={`https://www.youtube.com/results?search_query=${encodeURIComponent(selectedMovie.title + " trailer")}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: "block",
-                    textAlign: "center",
-                    padding: "10px 14px",
-                    backgroundColor: "#e50914",
-                    color: "#fff",
-                    borderRadius: "6px",
-                    textDecoration: "none",
-                    fontWeight: "bold",
-                    fontSize: "13px"
-                  }}
-                >
-                  ▶ Watch Trailer on YouTube
-                </a>
-              </div>
-            )}
+            {/* Full Movie Player Embed */}
+            <div style={{ marginBottom: "15px", position: "relative", paddingBottom: "56.25%", height: 0 }}>
+              <iframe
+                src={`https://vidsrc.to/embed/movie/${selectedMovie.id}`}
+                title="Full Movie Player"
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "8px",
+                  border: "none"
+                }}
+                allowFullScreen
+              ></iframe>
+            </div>
 
             <p style={{ fontSize: "13px", lineHeight: "1.5" }}>{selectedMovie.overview || "No description available."}</p>
           </div>
