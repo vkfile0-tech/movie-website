@@ -165,10 +165,10 @@ export default function Home() {
               Release Date: {selectedMovie.release_date} | Rating: ⭐ {selectedMovie.vote_average}
             </p>
 
-            {/* Full Movie Player Embed */}
+            {/* Embed Player with Pop-up Blocking */}
             <div style={{ marginBottom: "15px", position: "relative", paddingBottom: "56.25%", height: 0 }}>
               <iframe
-                src={`https://vidsrc.to/embed/movie/${selectedMovie.id}`}
+                src={`https://vidlink.pro/movie/${selectedMovie.id}`}
                 title="Full Movie Player"
                 style={{
                   position: "absolute",
@@ -180,6 +180,7 @@ export default function Home() {
                   border: "none"
                 }}
                 allowFullScreen
+                sandbox="allow-scripts allow-same-origin allow-forms"
               ></iframe>
             </div>
 
