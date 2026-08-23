@@ -14,8 +14,8 @@ const myMovies: CustomMovie[] = [
   {
     id: 1,
     title: "Charming Greek seaside village with whitewashed buildings and azure sea",
-    // Clean Desert Vector Poster
-    poster: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='900' viewBox='0 0 600 900'><rect width='600' height='450' fill='%23ffb703'/><rect y='450' height='450' width='600' fill='%23fb8500'/><path d='M0 500 Q 150 400 300 500 T 600 500 L 600 900 L 0 900 Z' fill='%23d4a373'/><path d='M0 600 Q 200 520 400 620 T 600 580 L 600 900 L 0 900 Z' fill='%23bc6c25'/><circle cx='480' cy='160' r='65' fill='%23fff3b0'/></svg>",
+    // Aapki di hui landscape/mountains wali exact photo
+    poster: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
     driveEmbedUrl: "https://drive.google.com/file/d/1UNGtaVfFUM75dIeMmVFy7GDhY9nIl1fS/preview",
     description: "Experience the idyllic beauty of a traditional Greek village nestled along the stunning blue coast, hosted completely clean from ads."
   }
