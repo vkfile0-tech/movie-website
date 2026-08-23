@@ -13,10 +13,13 @@ interface CustomMovie {
 const myMovies: CustomMovie[] = [
   {
     id: 1,
-    title: "My First Movie",
-    poster: "https://images.pexels.com/photos/3829965/pexels-photo-3829965.jpeg?auto=compress&cs=tinysrgb&w=600",
+    // Aapka naya aur lamba title
+    title: "Charming Greek seaside village with whitewashed buildings and azure sea",
+    // Isi video ke frame se bana poster
+    poster: "https://images.pexels.com/videos/3829965/pictures/preview-0.jpg",
     driveEmbedUrl: "https://drive.google.com/file/d/1UNGtaVfFUM75dIeMmVFy7GDhY9nIl1fS/preview",
-    description: "Enjoy watching in HD quality with zero ads."
+    // Nayi descriptive description
+    description: "Experience the idyllic beauty of a traditional Greek village nestled along the stunning blue coast, hosted completely clean from ads."
   }
 ];
 
@@ -45,7 +48,10 @@ export default function Home() {
             }}
           >
             <img src={movie.poster} alt={movie.title} style={{ width: "100%", height: "250px", objectFit: "cover" }} />
-            <h3 style={{ fontSize: "15px", marginTop: "10px", padding: "0 5px" }}>{movie.title}</h3>
+            {/* Title padding slightly adjusted for longer names */}
+            <h3 style={{ fontSize: "14px", marginTop: "10px", padding: "0 10px", fontWeight: "normal", lineHeight: "1.3" }}>
+              {movie.title}
+            </h3>
           </div>
         ))}
       </div>
@@ -94,7 +100,7 @@ export default function Home() {
             >
               ✖
             </button>
-            <h2 style={{ marginBottom: "15px" }}>{selectedMovie.title}</h2>
+            <h2 style={{ marginBottom: "15px", fontSize: "18px", lineHeight: "1.3" }}>{selectedMovie.title}</h2>
 
             <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
               <iframe
