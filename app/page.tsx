@@ -14,8 +14,8 @@ const myMovies: CustomMovie[] = [
   {
     id: 1,
     title: "Charming Greek seaside village with whitewashed buildings and azure sea",
-    // Clean & working image link
-    poster: "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=600&q=80",
+    // Double extension path match kar diya hai
+    poster: "/greek.jpg.jpg",
     driveEmbedUrl: "https://drive.google.com/file/d/1UNGtaVfFUM75dIeMmVFy7GDhY9nIl1fS/preview",
     description: "Experience the idyllic beauty of a traditional Greek village nestled along the stunning blue coast, hosted completely clean from ads."
   }
