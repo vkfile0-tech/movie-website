@@ -13,12 +13,10 @@ interface CustomMovie {
 const myMovies: CustomMovie[] = [
   {
     id: 1,
-    // Aapka naya aur lamba title
     title: "Charming Greek seaside village with whitewashed buildings and azure sea",
-    // Isi video ke frame se bana poster
-    poster: "https://images.pexels.com/videos/3829965/pictures/preview-0.jpg",
+    // Clean & working image link
+    poster: "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=600&q=80",
     driveEmbedUrl: "https://drive.google.com/file/d/1UNGtaVfFUM75dIeMmVFy7GDhY9nIl1fS/preview",
-    // Nayi descriptive description
     description: "Experience the idyllic beauty of a traditional Greek village nestled along the stunning blue coast, hosted completely clean from ads."
   }
 ];
@@ -48,7 +46,6 @@ export default function Home() {
             }}
           >
             <img src={movie.poster} alt={movie.title} style={{ width: "100%", height: "250px", objectFit: "cover" }} />
-            {/* Title padding slightly adjusted for longer names */}
             <h3 style={{ fontSize: "14px", marginTop: "10px", padding: "0 10px", fontWeight: "normal", lineHeight: "1.3" }}>
               {movie.title}
             </h3>
