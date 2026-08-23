@@ -14,8 +14,8 @@ const myMovies: CustomMovie[] = [
   {
     id: 1,
     title: "Charming Greek seaside village with whitewashed buildings and azure sea",
-    // 100% Reliable SVG Poster (Zero link error)
-    poster: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='900' viewBox='0 0 600 900'><rect width='600' height='450' fill='%230077be'/><rect y='450' height='450' width='600' fill='%2300a8e8'/><polygon points='100,480 250,300 400,480' fill='%23f4f4f4'/><rect x='150' y='450' width='200' height='180' fill='%23ffffff'/><path d='M200 450 A 50 50 0 0 1 300 450' fill='%23d90429'/><circle cx='480' cy='120' r='60' fill='%23ffb703'/></svg>",
+    // Clean Desert Vector Poster
+    poster: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='900' viewBox='0 0 600 900'><rect width='600' height='450' fill='%23ffb703'/><rect y='450' height='450' width='600' fill='%23fb8500'/><path d='M0 500 Q 150 400 300 500 T 600 500 L 600 900 L 0 900 Z' fill='%23d4a373'/><path d='M0 600 Q 200 520 400 620 T 600 580 L 600 900 L 0 900 Z' fill='%23bc6c25'/><circle cx='480' cy='160' r='65' fill='%23fff3b0'/></svg>",
     driveEmbedUrl: "https://drive.google.com/file/d/1UNGtaVfFUM75dIeMmVFy7GDhY9nIl1fS/preview",
     description: "Experience the idyllic beauty of a traditional Greek village nestled along the stunning blue coast, hosted completely clean from ads."
   }
